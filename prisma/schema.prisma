@@ -1,0 +1,160 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Brand {
+  id           String   @id @default(cuid())
+  name         String
+  slug         String   @unique
+  logoUrl      String?
+  contactName  String
+  contactPhone String
+  email        String   @unique
+  passwordHash String
+  active       Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  branches     Branch[]
+  rewards      Reward[]
+  submissions  ReviewSubmission[]
+  activityLogs ActivityLog[]
+}
+
+model Branch {
+  id            String   @id @default(cuid())
+  brandId       String
+  name          String
+  googleMapsCID String
+  placeId       String?
+  reviewUrl     String
+  mapsUrl       String
+  qrImagePath          String?
+  active               Boolean           @default(true)
+  verificationType     VerificationType  @default(MAPS)
+  instagramLocationTag String?
+  createdAt            DateTime          @default(now())
+
+  brand        Brand              @relation(fields: [brandId], references: [id])
+  rewards      Reward[]
+  submissions  ReviewSubmission[]
+  rewardsGiven RewardGiven[]
+}
+
+model Scenario {
+  id          String @id @default(cuid())
+  name        String
+  slug        String @unique
+  description String
+}
+
+model Reward {
+  id          String   @id @default(cuid())
+  brandId     String
+  branchId    String
+  name        String
+  imageUrl    String?
+  dailyLimit  Int      @default(10)
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  brand       Brand         @relation(fields: [brandId], references: [id])
+  branch      Branch        @relation(fields: [branchId], references: [id])
+  stocks      RewardStock[]
+  given       RewardGiven[]
+}
+
+model RewardStock {
+  id             String   @id @default(cuid())
+  rewardId       String
+  date           String
+  totalCount     Int
+  remainingCount Int
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  reward Reward @relation(fields: [rewardId], references: [id])
+
+  @@unique([rewardId, date])
+}
+
+model ReviewSubmission {
+  id                 String             @id @default(cuid())
+  branchId           String
+  brandId            String
+  screenshotPath     String
+  verificationStatus VerificationStatus @default(PENDING)
+  verificationNote   String?
+  aiDetectedName     String?
+  customerName       String?
+  ipAddress          String
+  userAgent          String?
+  ipCity             String?            // İl
+  ipRegion           String?            // İlçe
+  ipDistrict         String?            // Semt/Mahalle
+  ipCountry          String?            // Ülke
+  createdAt          DateTime           @default(now())
+
+  branch      Branch       @relation(fields: [branchId], references: [id])
+  brand       Brand        @relation(fields: [brandId], references: [id])
+  rewardGiven RewardGiven?
+}
+
+model RewardGiven {
+  id           String   @id @default(cuid())
+  submissionId String   @unique
+  rewardId     String
+  brandId      String
+  branchId     String
+  customerName String
+  createdAt    DateTime @default(now())
+
+  submission ReviewSubmission @relation(fields: [submissionId], references: [id])
+  reward     Reward           @relation(fields: [rewardId], references: [id])
+  branch     Branch           @relation(fields: [branchId], references: [id])
+}
+
+model ActivityLog {
+  id          String   @id @default(cuid())
+  brandId     String?
+  action      String
+  entityType  String
+  entityId    String?
+  oldValue    String?
+  newValue    String?
+  performedBy String
+  createdAt   DateTime @default(now())
+
+  brand Brand? @relation(fields: [brandId], references: [id])
+}
+
+model AdminUser {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  passwordHash String
+  name         String
+  role         UserRole  @default(BRAND)
+  createdAt    DateTime  @default(now())
+}
+
+enum UserRole {
+  ADMIN
+  BRAND
+}
+
+enum VerificationType {
+  MAPS
+  INSTAGRAM
+}
+
+enum VerificationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}

@@ -1,0 +1,105 @@
+
+!.env.example
+!.env.template
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+.claude/
+.credentials.json
+.DS_Store
+.env
+.env.*
+.env*
+.envrc
+.idea/
+.next/
+.parcel-cache/
+.pnp.*
+.pnpm-debug.log*
+.turbo/
+.vercel
+.vscode/
+.yarn/*
+*.db
+*.db-journal
+*.db-shm
+*.db-wal
+*.key
+*.local
+*.log
+*.pem
+*.sqlite
+*.sqlite3
+*.swo
+*.swp
+*.tsbuildinfo
+/.next/
+/.pnp
+/build
+/coverage
+/node_modules
+/out/
+/src/generated/prisma
+# === Universal .gitignore (raspy-prod) ===
+# Build artifacts
+# Core dumps
+# Database
+# debug
+# dependencies
+# Dev DB (sqlite) - takip dis
+# Env / secrets — kesinlikle commit edilmesin
+# env files (can opt-in for committing if needed)
+# IDE
+# Logs
+# misc
+# next.js
+# Node
+# OS
+# production
+# Recordings / generated media (büyük dosyalar)
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+# testing
+# typescript
+# vercel
+ai-logs/
+auth-info/
+backups/
+baileys_auth_info/
+baileys-store/
+build/
+chat-history/
+config.local.*
+core.*
+data/*.db*
+data/*.sqlite*
+data/audio/
+data/cache/
+data/recordings/
+dev.db
+dist/
+gcloud-*.json
+gcloud-key.json
+generated-images/
+generated-videos/
+hf-images/
+logs/
+next-env.d.ts
+node_modules/
+npm-debug.log*
+out/
+paste-cache/
+pm2-logs/
+pnpm-debug.log*
+public/generated-images/
+public/generated-videos/
+secrets/
+service-account*.json
+session-env/
+sessions/
+shell-snapshots/
+telemetry/
+Thumbs.db
+usage-data/
+yarn-debug.log*
+yarn-error.log*
